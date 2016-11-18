@@ -10,7 +10,7 @@ module Lita
       })
 
       def index_conversation(response)
-        response.reply("GOT #{response.message.body}")
+        response.reply "RECIEVED #{response.message.body} from #{response.message.source.room_object.inspect}"
       end
 
       Lita.register_handler(self)
