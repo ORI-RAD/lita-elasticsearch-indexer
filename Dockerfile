@@ -5,7 +5,7 @@ RUN gem install -N bundler lita
 #miscellaneous
 RUN ["mkdir","-p","/var/www"]
 WORKDIR /var/www/app
-ADD Gemfile.local /var/www/app/Gemfile
+ADD Gemfile /var/www/app/Gemfile
 ADD Gemfile.lock /var/www/app/Gemfile.lock
 ADD lita-elasticsearch-indexer.gemspec /var/www/app/lita-elasticsearch-indexer.gemspec
 
