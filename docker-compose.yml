@@ -8,6 +8,7 @@ services:
     restart: always
     links:
       - redis
+      - elasticsearch:elastic.local
     ports:
       - 8080:8080
     env_file:
@@ -16,3 +17,7 @@ services:
     image: redis
     volumes:
       - ./redis:/var/lib/redis
+  elasticsearch:
+    image: elasticsearch:2.2.2
+    ports:
+      - '9200:9200'
