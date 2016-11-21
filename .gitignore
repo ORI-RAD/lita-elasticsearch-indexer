@@ -10,6 +10,9 @@
 /test/version_tmp/
 /tmp/
 
+# This is only used for development
+docker-compose.override.yml 
+
 # lita.env contains secrets
 /lita.env
 
