@@ -31,4 +31,5 @@ Lita.configure do |config|
   ## Example: Set configuration for any loaded handlers. See the handler's
   ## documentation for options.
   # config.handlers.some_handler.some_config_key = "value"
+  config.handlers.elasticsearch_indexer.elasticsearch_url = ENV['LITA_ELASTICSEARCH_URL']
 end
