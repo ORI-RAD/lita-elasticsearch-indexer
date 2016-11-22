@@ -10,6 +10,12 @@
 /test/version_tmp/
 /tmp/
 
+# This is only used for development
+docker-compose.override.yml 
+
+# lita.env contains secrets
+/lita.env
+
 # Used by dotenv library to load environment variables.
 # .env
 
@@ -42,7 +48,7 @@ build-iPhoneSimulator/
 
 # for a library or gem, you might want to ignore these files since the code is
 # intended to run in multiple environments; otherwise, check them in:
-# Gemfile.lock
+Gemfile.lock
 # .ruby-version
 # .ruby-gemset
 

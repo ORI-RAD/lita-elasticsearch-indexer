@@ -1,0 +1,23 @@
+version: '2'
+services:
+  lita:
+    build: .
+    image: lita-elasticsearch-indexer_server
+    volumes:
+      - .:/var/www/app
+    restart: always
+    links:
+      - redis
+      - elasticsearch:elastic.local
+    ports:
+      - 8080:8080
+    env_file:
+      - lita.env
+  redis:
+    image: redis
+    volumes:
+      - ./redis:/var/lib/redis
+  elasticsearch:
+    image: elasticsearch:2.2.2
+    ports:
+      - '9200:9200'

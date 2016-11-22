@@ -1,7 +1,8 @@
+require 'elasticsearch'
 module Lita
   module Handlers
     class ElasticsearchIndexer < Handler
-      # insert handler code here
+      config :elasticsearch_url
 
       route(/^(.+)/,
         :index_conversation,
@@ -9,8 +10,29 @@ module Lita
           "Stores conversations in elasticsearch"
       })
 
+      def elasticsearch_client
+        @@elasticsearch_client ||= Elasticsearch::Client.new(
+          host: config.elasticsearch_url
+        )
+      end
+
+
       def index_conversation(response)
-        response.reply "RECIEVED #{response.message.body} from #{response.message.source.room_object.inspect}"
+        user = response.user
+        message = response.message
+        room = message.room_object
+        index = elasticsearch_client.index(
+          index: 'rad-chat',
+          type: 'message',
+          body: {
+            user: {id: user.id, name: user.name},
+            message: {
+              room: {id: room.id, name: room.name},
+              body: message.body
+            }
+          }
+        )
+        response.reply "indexed => #{index}"
       end
 
       Lita.register_handler(self)

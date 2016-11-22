@@ -1,0 +1,20 @@
+version: '2'
+services:
+  bundle:
+    image: "lita-elasticsearch-indexer_server"
+    volumes_from:
+      - lita
+    entrypoint: ['bundle']
+  rake:
+    image: "lita-elasticsearch-indexer_server"
+    volumes_from:
+      - lita
+    entrypoint: ['rake']
+  rspec:
+    image: "lita-elasticsearch-indexer_server"
+    environment:
+      - RAILS_ENV=test
+    volumes_from:
+      - lita
+    entrypoint: ['rspec']
+    command: spec
