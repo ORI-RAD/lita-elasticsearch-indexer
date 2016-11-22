@@ -27,6 +27,7 @@ module Lita
           body: {
             user: {id: user.id, name: user.name},
             message: {
+              private: message.private_message?,
               room: {id: room.id, name: room.name},
               body: message.body
             }
