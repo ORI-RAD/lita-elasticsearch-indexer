@@ -46,10 +46,14 @@ Similar to above, it should always return a table with the following headers, an
 Launching the Application
 ===
 
+Create lita.env in the Application root, using lita.env.example. If you are using
+slack, you will need to create a [Slack API Token](https://my.slack.com/services/new/lita)
+and add it to the LITA_SLACK_TOKEN variable.
+
 In the Application root, run the following:
 ```bash
+touch Gemfile.lock
 docker-compose up -d
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml rake db:migrate
 ```
 
 Docker Compose
