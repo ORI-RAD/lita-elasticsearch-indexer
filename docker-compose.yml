@@ -20,4 +20,4 @@ services:
   elasticsearch:
     image: elasticsearch:2.2.2
     ports:
-      - '9200:9200'
+      - 9200
