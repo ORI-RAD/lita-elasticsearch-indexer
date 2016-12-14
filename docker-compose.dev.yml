@@ -13,8 +13,10 @@ services:
   rspec:
     image: "lita-elasticsearch-indexer_server"
     environment:
-      - RAILS_ENV=test
+      - LITA_REDIS_HOST=redis
     volumes_from:
       - lita
+    links:
+      - redis
     entrypoint: ['rspec']
     command: spec
