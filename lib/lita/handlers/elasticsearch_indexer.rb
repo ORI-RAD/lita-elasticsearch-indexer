@@ -2,8 +2,8 @@ require 'elasticsearch'
 module Lita
   module Handlers
     class ElasticsearchIndexer < Handler
-      config :elasticsearch_url
-      config :elasticsearch_index_name
+      config :elasticsearch_url, required: true
+      config :elasticsearch_index_name, required: true
       config :elasticsearch_index_type
       config :elasticsearch_index_options
 
