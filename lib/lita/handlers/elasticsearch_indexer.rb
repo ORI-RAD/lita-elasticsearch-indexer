@@ -3,6 +3,9 @@ module Lita
   module Handlers
     class ElasticsearchIndexer < Handler
       config :elasticsearch_url
+      config :elasticsearch_index_name
+      config :elasticsearch_index_type
+      config :elasticsearch_index_options
 
       route(/^(.+)/,
         :index_conversation,
