@@ -14,9 +14,11 @@ services:
     image: "lita-elasticsearch-indexer_server"
     environment:
       - LITA_REDIS_HOST=redis
+      - LITA_ELASTICSEARCH_URL=elastic.local:9200
     volumes_from:
       - lita
     links:
       - redis
+      - elasticsearch:elastic.local
     entrypoint: ['rspec']
     command: spec
