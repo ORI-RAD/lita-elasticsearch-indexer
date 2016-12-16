@@ -1,3 +1,4 @@
+require 'pry'
 require 'elasticsearch'
 module Lita
   module Handlers
@@ -24,17 +25,18 @@ module Lita
         user = response.user
         message = response.message
         room = message.room_object
+        index_body = {
+          user: {id: user.id, name: user.name},
+          message: {
+            private: message.private_message?,
+            body: message.body
+          }
+        }
+        index_body[:room] = {id: room.id, name: room.name} if room
         index = elasticsearch_client.index(
           index: 'rad-chat',
           type: 'message',
-          body: {
-            user: {id: user.id, name: user.name},
-            message: {
-              private: message.private_message?,
-              room: {id: room.id, name: room.name},
-              body: message.body
-            }
-          }
+          body: index_body
         )
         response.reply "indexed => #{index}"
       end
