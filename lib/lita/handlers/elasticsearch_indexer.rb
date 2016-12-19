@@ -5,7 +5,7 @@ module Lita
     class ElasticsearchIndexer < Handler
       config :elasticsearch_url, required: true
       config :elasticsearch_index_name, required: true
-      config :elasticsearch_index_type
+      config :elasticsearch_index_type, default: "message"
       config :elasticsearch_index_options
 
       route(/^(.+)/,
@@ -34,8 +34,8 @@ module Lita
         }
         index_body[:room] = {id: room.id, name: room.name} if room
         index = elasticsearch_client.index(
-          index: 'rad-chat',
-          type: 'message',
+          index: config.elasticsearch_index_name,
+          type: config.elasticsearch_index_type,
           body: index_body
         )
         response.reply "indexed => #{index}"
