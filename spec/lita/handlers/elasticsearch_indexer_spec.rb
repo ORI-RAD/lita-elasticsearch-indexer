@@ -33,6 +33,10 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
         let(:index_name) { "test-#{Faker::Internet.slug}" }
         let(:index_type) { "test-#{Faker::Internet.slug}" }
         let(:index_body) { {
+          "user" => {
+            "id" => user.id,
+            "name" => user.name
+          },
           "message" => {
             "private" => private_message,
             "body" => message
