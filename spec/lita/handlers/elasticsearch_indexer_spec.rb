@@ -37,26 +37,31 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
         let(:elasticsearch_client) { 
           Elasticsearch::Client.new(host: elasticsearch_url)
         }
-        let(:search) { elasticsearch_client.search(body: { query: { query_string: {query: escaped_message, default_operator: "AND"}}}) }
-        let(:document) { search && search["hits"]["hits"].first }
+        let(:existing_documents) { elasticsearch_client.search["hits"]["hits"] }
+        let(:new_documents) { elasticsearch_client.search["hits"]["hits"] - existing_documents }
+        let(:document) { new_documents.first }
         before do
           registry_config.elasticsearch_url = elasticsearch_url
           registry_config.elasticsearch_index_name = index_name
           registry_config.elasticsearch_index_type = index_type
 
           expect(registry_config.elasticsearch_url).not_to be_nil
+
+          expect{ existing_documents }.not_to raise_error
           expect{ send_message(message) }.not_to raise_error
           expect{ elasticsearch_client.indices.flush }.not_to raise_error
-          expect{ search }.not_to raise_error
-          expect(search["hits"]["total"]).to eq(1)
+          expect{ new_documents }.not_to raise_error
+          expect(new_documents.length).to eq(1)
           expect(document).not_to be_nil
         end
         after do
-          elasticsearch_client.delete(
-            id: document["_id"],
-            index: document["_index"],
-            type: document["_type"]
-          ) if document
+          new_documents.each do |d|
+            elasticsearch_client.delete(
+              id: d["_id"],
+              index: d["_index"],
+              type: d["_type"]
+            )
+          end
         end
 
         it { expect(document["_index"]).to eq(index_name) }
