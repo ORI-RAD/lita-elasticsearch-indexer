@@ -44,6 +44,8 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
         end
 
         it_behaves_like 'an elasticsearch indexer' do
+          include_context 'with a single document indexed'
+
           it { expect(document["_index"]).to eq(index_name) }
           it { expect(document["_type"]).to eq(index_type) }
         end
