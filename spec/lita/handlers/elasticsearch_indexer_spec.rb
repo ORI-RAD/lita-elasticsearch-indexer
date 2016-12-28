@@ -23,6 +23,8 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
     context 'with a non-empty message' do
       let(:escaped_characters) { Regexp.escape('\\+-&|!(){}[]^~*?:\/') }
       let(:message) { Faker::Hacker.say_something_smart }
+      let(:room_id) { Faker::Internet.slug }
+      let(:private_message) { false }
       let(:escaped_message) {
         message.gsub(/([#{escaped_characters}])/, '\\\\\1') 
       }
@@ -30,10 +32,16 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
       it { is_expected.to route(message).to(:index_conversation) }
 
       context 'send_message' do
-        let(:method) { send_message(message) }
+        let(:method) { send_message(message, from: room_id, privately: private_message) }
         let(:registry_config) { registry.config.handlers.elasticsearch_indexer }
         let(:index_name) { "test-#{Faker::Internet.slug}" }
         let(:index_type) { "test-#{Faker::Internet.slug}" }
+        let(:index_body) { {
+          "message" => {
+            "private" => private_message,
+            "body" => message
+          }
+        } }
         let(:elasticsearch_url) { ENV['LITA_ELASTICSEARCH_URL'] }
         before do
           registry_config.elasticsearch_url = elasticsearch_url
@@ -48,6 +56,7 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
 
           it { expect(document["_index"]).to eq(index_name) }
           it { expect(document["_type"]).to eq(index_type) }
+          it { expect(document["_source"]).to include(index_body) }
         end
       end
     end
