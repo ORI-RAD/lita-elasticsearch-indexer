@@ -30,42 +30,23 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
       it { is_expected.to route(message).to(:index_conversation) }
 
       context 'send_message' do
+        let(:method) { send_message(message) }
         let(:registry_config) { registry.config.handlers.elasticsearch_indexer }
         let(:index_name) { "test-#{Faker::Internet.slug}" }
         let(:index_type) { "test-#{Faker::Internet.slug}" }
         let(:elasticsearch_url) { ENV['LITA_ELASTICSEARCH_URL'] }
-        let(:elasticsearch_client) { 
-          Elasticsearch::Client.new(host: elasticsearch_url)
-        }
-        let(:existing_documents) { elasticsearch_client.search["hits"]["hits"] }
-        let(:new_documents) { elasticsearch_client.search["hits"]["hits"] - existing_documents }
-        let(:document) { new_documents.first }
         before do
           registry_config.elasticsearch_url = elasticsearch_url
           registry_config.elasticsearch_index_name = index_name
           registry_config.elasticsearch_index_type = index_type
 
           expect(registry_config.elasticsearch_url).not_to be_nil
-
-          expect{ existing_documents }.not_to raise_error
-          expect{ send_message(message) }.not_to raise_error
-          expect{ elasticsearch_client.indices.flush }.not_to raise_error
-          expect{ new_documents }.not_to raise_error
-          expect(new_documents.length).to eq(1)
-          expect(document).not_to be_nil
-        end
-        after do
-          new_documents.each do |d|
-            elasticsearch_client.delete(
-              id: d["_id"],
-              index: d["_index"],
-              type: d["_type"]
-            )
-          end
         end
 
-        it { expect(document["_index"]).to eq(index_name) }
-        it { expect(document["_type"]).to eq(index_type) }
+        it_behaves_like 'an elasticsearch indexer' do
+          it { expect(document["_index"]).to eq(index_name) }
+          it { expect(document["_type"]).to eq(index_type) }
+        end
       end
     end
 
