@@ -3,10 +3,10 @@ require 'elasticsearch'
 module Lita
   module Handlers
     class ElasticsearchIndexer < Handler
-      config :elasticsearch_url, required: true
-      config :elasticsearch_index_name, required: true
-      config :elasticsearch_index_type, default: "message"
-      config :elasticsearch_index_options
+      config :elasticsearch_url, type: String, required: true
+      config :elasticsearch_index_name, type: String, required: true
+      config :elasticsearch_index_type, type: String, default: "message"
+      config :elasticsearch_index_options, type: Proc
 
       route(/^(.+)/,
         :index_conversation,
@@ -19,7 +19,6 @@ module Lita
           host: config.elasticsearch_url
         )
       end
-
 
       def index_conversation(response)
         user = response.user
