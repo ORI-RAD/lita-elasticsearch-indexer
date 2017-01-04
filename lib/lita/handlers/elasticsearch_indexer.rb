@@ -32,15 +32,26 @@ module Lita
           }
         }
         index_body[:room] = {id: room.id, name: room.name} if room
-        index = elasticsearch_client.index(
-          index: config.elasticsearch_index_name,
-          type: config.elasticsearch_index_type,
+        index_params = {
           body: index_body
-        )
+        }.merge(elasticsearch_index_options(response))
+        index_params[:index] = config.elasticsearch_index_name
+        index_params[:type] = config.elasticsearch_index_type
+        index = elasticsearch_client.index(index_params)
         response.reply "indexed => #{index}"
       end
 
       Lita.register_handler(self)
+
+      private
+
+      def elasticsearch_index_options(response)
+        if config.elasticsearch_index_options
+          config.elasticsearch_index_options.call
+        else
+          {}
+        end
+      end
     end
   end
 end

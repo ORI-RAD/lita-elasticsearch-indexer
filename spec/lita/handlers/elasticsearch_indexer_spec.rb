@@ -67,6 +67,40 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
           it { expect(document["_type"]).to eq(index_type) }
           it { expect(document["_source"]).to include(index_body) }
         end
+
+        context 'when elasticsearch_index_options' do
+          let(:id) { Faker::Internet.slug }
+          before do
+            expect {
+              registry_config.elasticsearch_index_options = index_options
+            }.not_to raise_error
+          end
+          context 'is a Proc' do
+            let(:index_options) {
+              Proc.new {
+                {id: id}
+              }
+            }
+            it_behaves_like 'an elasticsearch indexer' do
+              include_context 'with a single document indexed'
+
+              it { expect(document["_id"]).to eq(id) }
+            end
+          end
+
+          context 'is a lambda' do
+            let(:index_options) {
+              lambda {
+                {id: id}
+              }
+            }
+            it_behaves_like 'an elasticsearch indexer' do
+              include_context 'with a single document indexed'
+
+              it { expect(document["_id"]).to eq(id) }
+            end
+          end
+        end
       end
     end
 
