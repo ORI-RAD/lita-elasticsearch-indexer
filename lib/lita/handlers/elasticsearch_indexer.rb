@@ -16,7 +16,7 @@ module Lita
 
       def elasticsearch_client
         @@elasticsearch_client ||= Elasticsearch::Client.new(
-          host: config.elasticsearch_url
+          urls: config.elasticsearch_url
         )
       end
 
