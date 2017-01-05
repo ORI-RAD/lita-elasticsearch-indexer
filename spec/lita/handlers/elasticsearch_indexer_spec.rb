@@ -11,7 +11,7 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
     it { expect(config[:elasticsearch_url].types).to contain_exactly(String) }
 
     # Elasticsearch::API::Actions#index documentation:
-    #   http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch%2FAPI%2FActions%3Aindex
+    #   http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions#index-instance_method
     it { expect(config).to have_key(:elasticsearch_index_name) }
     it { expect(config[:elasticsearch_index_name]).to be_required }
     it { expect(config[:elasticsearch_index_name].types).to contain_exactly(String) }
