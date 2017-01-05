@@ -77,7 +77,7 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
           end
           context 'is a Proc' do
             let(:index_options) {
-              Proc.new {
+              Proc.new { |response|
                 {id: id}
               }
             }
@@ -90,7 +90,7 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
 
           context 'is a lambda' do
             let(:index_options) {
-              lambda {
+              lambda { |response|
                 {id: id}
               }
             }

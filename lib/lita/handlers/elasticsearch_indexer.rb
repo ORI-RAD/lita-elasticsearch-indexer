@@ -47,7 +47,7 @@ module Lita
 
       def elasticsearch_index_options(response)
         if config.elasticsearch_index_options
-          config.elasticsearch_index_options.call
+          config.elasticsearch_index_options.call(response)
         else
           {}
         end
