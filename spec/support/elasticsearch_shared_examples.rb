@@ -1,6 +1,6 @@
 shared_examples 'an elasticsearch indexer' do |method_sym: :method, elasticsearch_url_sym: :elasticsearch_url|
   let(:elasticsearch_client) { 
-    Elasticsearch::Client.new(host: send(elasticsearch_url_sym))
+    Elasticsearch::Client.new(urls: send(elasticsearch_url_sym))
   }
   let(:existing_documents) { elasticsearch_client.search["hits"]["hits"] }
   let(:new_documents) { elasticsearch_client.search["hits"]["hits"] - existing_documents }

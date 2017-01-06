@@ -3,10 +3,10 @@ require 'elasticsearch'
 module Lita
   module Handlers
     class ElasticsearchIndexer < Handler
-      config :elasticsearch_url, required: true
-      config :elasticsearch_index_name, required: true
-      config :elasticsearch_index_type, default: "message"
-      config :elasticsearch_index_options
+      config :elasticsearch_url, type: String, required: true
+      config :elasticsearch_index_name, type: String, required: true
+      config :elasticsearch_index_type, type: String, default: "message"
+      config :elasticsearch_index_options, type: Proc
 
       route(/^(.+)/,
         :index_conversation,
@@ -16,10 +16,9 @@ module Lita
 
       def elasticsearch_client
         @@elasticsearch_client ||= Elasticsearch::Client.new(
-          host: config.elasticsearch_url
+          urls: config.elasticsearch_url
         )
       end
-
 
       def index_conversation(response)
         user = response.user
@@ -33,15 +32,26 @@ module Lita
           }
         }
         index_body[:room] = {id: room.id, name: room.name} if room
-        index = elasticsearch_client.index(
-          index: config.elasticsearch_index_name,
-          type: config.elasticsearch_index_type,
+        index_params = {
           body: index_body
-        )
+        }.merge(elasticsearch_index_options(response))
+        index_params[:index] = config.elasticsearch_index_name
+        index_params[:type] = config.elasticsearch_index_type
+        index = elasticsearch_client.index(index_params)
         response.reply "indexed => #{index}"
       end
 
       Lita.register_handler(self)
+
+      private
+
+      def elasticsearch_index_options(response)
+        if config.elasticsearch_index_options
+          config.elasticsearch_index_options.call(response)
+        else
+          {}
+        end
+      end
     end
   end
 end

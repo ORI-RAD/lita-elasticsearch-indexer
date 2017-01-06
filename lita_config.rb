@@ -33,4 +33,11 @@ Lita.configure do |config|
   # config.handlers.some_handler.some_config_key = "value"
   config.handlers.elasticsearch_indexer.elasticsearch_url = ENV['LITA_ELASTICSEARCH_URL']
   config.handlers.elasticsearch_indexer.elasticsearch_index_name = ENV['LITA_ELASTICSEARCH_INDEX_NAME']
+  config.handlers.elasticsearch_indexer.elasticsearch_index_options = lambda {|response|
+    options = {}
+    if response.message.extensions[:slack]
+      options[:id] = response.room.id + '-' + response.message.extensions[:slack][:timestamp]
+    end
+    options
+  }
 end
