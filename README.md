@@ -24,17 +24,16 @@ gem "lita-elasticsearch-indexer"
 
 ## Usage
 
-Once installed and the required config variables are set, nothing else needs to
-be done server side. The lita bot will automatically index any message that it
-sees, including private messages sent directly to the bot. The bot can only
-index messages that it sees, so nothing will be indexed from rooms the bot
-has not joined.
+lita-elasticsearch-indexer is a lurker-bot that silently indexes all messages posted
+by all users in any room to which it has been invited. It can also index
+private messages sent directly to the bot. The bot will not index any messages
+posted to rooms to which it has not been invited.
 
 ### Setting elasticsearch index options with a Proc
 
-Any of the optional arguments for [Elasticsearch::API::Actions index](http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions#index-instance_method) can be set via `elasticsearch_index_options` by creating a Proc 
+Any of the optional arguments for [Elasticsearch::API::Actions index](http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API/Actions#index-instance_method) can be set via `elasticsearch_index_options` by creating a Proc
 (or lambda) that returns a Hash. The hash will be merged with the required
-parameters and passed directly to the elasticsearch client index method. 
+parameters and passed directly to the elasticsearch client index method.
 
 ```
 config.handlers.elasticsearch_indexer.elasticsearch_index_options = lambda {|response|
