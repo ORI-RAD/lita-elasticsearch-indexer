@@ -1,10 +1,15 @@
 version: '2'
 services:
+  workdir:
+    image: ruby:2.3 # Reducing footprint by matching image to Dockerfile FROM
+    command: ['df'] # Just a quick command that exits. Mount info is a bonus.
+    volumes:
+      - .:/var/www/app
   lita:
     build: .
     image: lita-elasticsearch-indexer_server
-    volumes:
-      - .:/var/www/app
+    volumes_from:
+      - workdir
     restart: always
     links:
       - redis
