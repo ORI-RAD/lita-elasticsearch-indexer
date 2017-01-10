@@ -60,6 +60,11 @@ describe Lita::Handlers::ElasticsearchIndexer, lita_handler: true do
           expect(registry_config.elasticsearch_url).not_to be_nil
         end
 
+        it 'does not send a reply' do
+          expect{ method }.not_to raise_error
+          expect(replies).to be_empty
+        end
+
         it_behaves_like 'an elasticsearch indexer' do
           include_context 'with a single document indexed'
 
