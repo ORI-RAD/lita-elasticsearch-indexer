@@ -38,7 +38,6 @@ module Lita
         index_params[:index] = config.elasticsearch_index_name
         index_params[:type] = config.elasticsearch_index_type
         index = elasticsearch_client.index(index_params)
-        response.reply "indexed => #{index}"
       end
 
       Lita.register_handler(self)
