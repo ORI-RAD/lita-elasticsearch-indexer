@@ -3,12 +3,12 @@ services:
   bundle:
     image: "lita-elasticsearch-indexer_server"
     volumes_from:
-      - lita
+      - workdir
     entrypoint: ['bundle']
   rake:
     image: "lita-elasticsearch-indexer_server"
     volumes_from:
-      - lita
+      - workdir
     entrypoint: ['rake']
   rspec:
     image: "lita-elasticsearch-indexer_server"
@@ -16,7 +16,7 @@ services:
       - LITA_REDIS_HOST=redis
       - LITA_ELASTICSEARCH_URL=elastic.local:9200
     volumes_from:
-      - lita
+      - workdir
     links:
       - redis
       - elasticsearch:elastic.local
