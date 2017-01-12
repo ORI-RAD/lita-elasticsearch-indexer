@@ -1,9 +1,14 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-elasticsearch-indexer"
   spec.version       = "0.1.0"
-  spec.authors       = ["ORI-RAD"]
-  spec.email         = ["ORI-RAD@dm.duke.edu"]
-  spec.description   = "Listens to channel conversations and stores them to elasticsearch"
+  spec.authors       = ["Darrin Mann", "Darin London"]
+  spec.email         = ["darrin.mann@duke.edu", "darin.london@duke.edu"]
+  spec.description   = <<-EOF
+    lita-elasticsearch-indexer is a lurker-bot that silently indexes all messages posted
+    by all users in any room to which it has been invited. It can also index
+    private messages sent directly to the bot. The bot will not index any messages
+    posted to rooms to which it has not been invited.
+  EOF
   spec.summary       = "Listens to channel conversations and stores them to elasticsearch"
   spec.homepage      = "https://github.com/ORI-RAD/lita-elasticsearch-indexer"
   spec.license       = "MIT"
