@@ -1,4 +1,3 @@
-require 'pry'
 require 'elasticsearch'
 module Lita
   module Handlers
