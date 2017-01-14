@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-elasticsearch-indexer"
-  spec.version       = "0.1.0"
+  spec.version       = "0.1.1"
   spec.authors       = ["Darrin Mann", "Darin London"]
   spec.email         = ["darrin.mann@duke.edu", "darin.london@duke.edu"]
   spec.description   = <<-EOF
